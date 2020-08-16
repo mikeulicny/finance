@@ -109,7 +109,7 @@ def main():
                 print("Data returned: {}".format(re))
 
             except tdma.NoDataError:
-                print("Error: [{}] has no timeseries sales data")
+                print("Error: [{}] has no timeseries sales data".format(symbol))
 
             # create delay for TD Ameritrade requests. TD Ameritrade has a max requests/second. If this
             # limit is hit the users app will be locked out of sending requests for a few minutes
