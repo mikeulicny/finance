@@ -25,14 +25,13 @@ def main():
         }
 
     while True:
-        
-        # get a list of previous symbols in daily database
+        # get a set of previous symbols in daily database
         cur.execute("SELECT symbol FROM daily GROUP BY symbol")
         db_symbols = set(cur.fetchall())
-        # current_daily_symbols = [it[0] for it in db_symbols]
 
         # get a list of current symbols
         symbols = get_equity_symbols(conn)
+        symbols += get_etf_symbols(conn)
 
         for symbol in symbols:
             url = "https://api.tdameritrade.com/v1/marketdata/{}/pricehistory".format(symbol)
@@ -110,11 +109,11 @@ def main():
                 print("Data returned: {}".format(re))
 
             except tdma.NoDataError:
-                print("> {} has no timeseries sales data")
+                print("Error: [{}] has no timeseries sales data")
 
             # create delay for TD Ameritrade requests. TD Ameritrade has a max requests/second. If this
             # limit is hit the users app will be locked out of sending requests for a few minutes
-            time.sleep(0.4)
+            time.sleep(0.5)
 
     cur.close()
     conn.close()
